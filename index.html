@@ -115,11 +115,11 @@
 
 
 
-		var instruction_1 = {
+    var instruction_1 = {
       type: jsPsychHtmlButtonResponse,
       data: { screen: "instruction_1" },
 			stimulus: `
-          <p>Hello, ${idnum} we are interested in your opinions about a variety of things! 
+          <p>Hello, we are interested in your opinions about a variety of things! 
           When you are ready to start the experiment please press start to begin. 
           You can continue in 3 seconds.</p>`,
 			choices: ["Click to continue"],
@@ -132,7 +132,7 @@
 	  var cutie = {
       type: jsPsychHtmlButtonResponse,
       data: { screen: "cutie" },
-			stimulus: ${idnum},
+			stimulus: idnum,
 			choices: ["Click to continue"],
       
 		};
