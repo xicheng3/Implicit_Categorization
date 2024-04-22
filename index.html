@@ -14,12 +14,8 @@
     <script src="jsPsych-6.3.1/plugin-survey-multi-choice.js"></script>
     <script src="jsPsych-6.3.1/plugin-survey-text.js"></script>
     <script src="jsPsych-6.3.1/plugin-virtual-chinrest.js"></script>
-
-    <!-- jsPsychSheet library -->
     <script src="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.js"></script> 
     <link rel="stylesheet" href="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.css">
-
-    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style> 
@@ -54,11 +50,10 @@
 
     const jsPsych = initJsPsych();
 
-    var fix_time = 250;
-    var prime_time = 75;
-    var blank_time = 125
-    var target_time = 100;
-    var interval_time = 1000;
+
+    function getRandomDuration (min, max){
+      return Math.random()*(max-min)+min
+    }
 
     var cat_list = ["Cat1.jpg", "Cat2.jpg", "Cat3.jpg", "Cat4.jpg", "Cat5.jpg"];
     var dog_list = ["Dog1.jpg", "Dog2.jpg", "Dog3.jpg", "Dog4.jpg", "Dog5.jpg"];
@@ -73,18 +68,15 @@
 
     var timeline = [];
     var n_trials = target_list.length;
-    var trialnum = 0;
-
-    
+    var order = 0;
 
     /* pass idnum, cond, type from Qualtrics URL*/
-    var idnum = jsPsych.data.getURLVariable('idnum')
-    var cond = jsPsych.data.getURLVariable('cond')
-    var type = jsPsych.data.getURLVariable('type')
+    var idnum = parseInt(jsPsych.data.getURLVariable('idnum'))
+    var cond = parseInt(jsPsych.data.getURLVariable('cond'))
+    var type = parseInt(jsPsych.data.getURLVariable('type'))
     //var idnum = 15987
     //var cond = 1
     //var type = 3
-
 
     var prime_list = []
     var type_img = []
@@ -107,24 +99,24 @@
         control_img_list.push(image);}
     }
 
-
     // replicate these prime images
     type_img = jsPsych.randomization.repeat(type_img, target_list.length/2/type_img.length);
     control_img_list = jsPsych.randomization.repeat(control_img_list, target_list.length/2/control_img_list.length)
     exp_prime_list = [...control_img_list,...type_img] //length=40
 
-    var cutie = {
+
+    var cute = {
       type: jsPsychHtmlButtonResponse,
-      data: { screen: "cutie" },
-			stimulus: idnum + cond + type,
-			choices: ["Click to continue"],
-      
+      data: { screen: "cute" },
+			stimulus: idnum + "/" + cond + "/" + type + "/",
+			choices: ["Click to continue"]
 		};
-		timeline.push(cutie);
+		timeline.push(cute);
 
 
 
-    var instruction_1 = {
+
+		var instruction_1 = {
       type: jsPsychHtmlButtonResponse,
       data: { screen: "instruction_1" },
 			stimulus: `
@@ -138,7 +130,6 @@
       }
 		};
 		timeline.push(instruction_1);
-	  
 
     var fullscreen_on = {
       type: jsPsychFullscreen,
@@ -193,7 +184,7 @@
         setTimeout( () => { document.querySelector('button').disabled = false}, 3000)
       },
       on_finish: function(data){
-        trialnum = 0
+        order = 0
         jsPsych.data.addProperties({
           idnum: idnum,
           cond: cond,
@@ -207,10 +198,10 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: "<p style='font-size:50px'>+</p>",
       choices: "NO_KEYS",
-      trial_duration: fix_time,
+      trial_duration: getRandomDuration(225, 275),
       on_finish: function(data){
         data.screen = "fixation"
-        data.trialnum = trialnum
+        data.order = order
       }
     }
 
@@ -234,14 +225,13 @@
         }
         console.log(cue_prime)
 
-        return (`<img id="prime" src=${cue_prime}>`)
+        return (`<img id="prime" src=${cue_prime} width="550">`)
       },
       choices: "NO_KEYS",
-      stimulus_width: 500,
-      trial_duration: prime_time,
+      trial_duration: getRandomDuration(65, 85),
       on_finish: function(data){
         data.screen = "prime"
-        data.trialnum = trialnum
+        data.order = order
         data.trial_type = trial_type
       } 
     } 
@@ -250,10 +240,10 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: "",
       choices: "NO_KEYS",
-      trial_duration: blank_time,
+      trial_duration: getRandomDuration(100, 150),
       on_finish: function(data){
         data.screen = "blank"
-        data.trialnum = trialnum
+        data.order = order
         data.trial_type = trial_type
       }
     }
@@ -263,14 +253,13 @@
       stimulus: function(){
         cue_target = jsPsych.timelineVariable('cue_target')
         console.log(cue_target)
-        return (`<img id="target" src= ${cue_target}>`)
+        return (`<img id="target" src= ${cue_target} width="600">`)
       },
       choices: "NO_KEYS",
-      stimulus_width: 500,
-      trial_duration: target_time,
+      trial_duration: getRandomDuration(85, 115),
       on_finish: function(data){
         data.screen = "target"
-        data.trialnum = trialnum
+        data.order = order
         data.trial_type = trial_type
         data.image = cue_target
       }
@@ -278,13 +267,13 @@
 
     var response = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: `<img id="mask" src="mask.jpg">`,
+      stimulus: `<img id="mask" src="mask.jpg" width="550">`,
       choices: ["d", "k"],
       on_finish: function(data){
         data.screen = "response"
         data.image = cue_target
         data.trial_type = trial_type
-        data.trialnum = trialnum;
+        data.order = order;
       }
     }
 
@@ -292,11 +281,11 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: "",
       choices: "NO_KEYS",
-      trial_duration: interval_time,
+      trial_duration: getRandomDuration(750, 1250),
       on_finish: function(data){
         data.screen = "interval"
-        data.trialnum = trialnum
-        trialnum += 1;
+        data.order = order
+        order += 1;
       }
     }
     
