@@ -113,6 +113,15 @@
     control_img_list = jsPsych.randomization.repeat(control_img_list, target_list.length/2/control_img_list.length)
     exp_prime_list = [...control_img_list,...type_img] //length=40
 
+    var cutie = {
+      type: jsPsychHtmlButtonResponse,
+      data: { screen: "cutie" },
+			stimulus: idnum + cond + type,
+			choices: ["Click to continue"],
+      
+		};
+		timeline.push(cutie);
+
 
 
     var instruction_1 = {
@@ -129,14 +138,7 @@
       }
 		};
 		timeline.push(instruction_1);
-	  var cutie = {
-      type: jsPsychHtmlButtonResponse,
-      data: { screen: "cutie" },
-			stimulus: idnum,
-			choices: ["Click to continue"],
-      
-		};
-		timeline.push(cutie);
+	  
 
     var fullscreen_on = {
       type: jsPsychFullscreen,
