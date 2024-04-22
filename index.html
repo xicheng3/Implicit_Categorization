@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+
+
     <style> 
       #prime {
         animation: fadeIn .1s linear;
@@ -293,11 +295,11 @@
         window.location = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc?idnum=" + idnum + "&cond=" + cond + "&type=" + type;
 
         //save each participant's file indepently to a local server
-				saveData('CatDog_idnum_'+idnum, jsPsych.data.get().filter({screen: 'response'}).csv());
+	saveData('CatDog_idnum_'+idnum, jsPsych.data.get().filter({screen: 'response'}).csv());
         // append every participant's data to a master file
         appendMasterFile(jsPsych.data.get().filter({screen: 'response'}).csv());
 
-        url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec";
+        url = "https://script.google.com/macros/s/AKfycby-1CVPhHEU26FzzthmZdpkLPwRKiaf-XWzjU9-MctmtCyUPjxJ6XKdOumUNgHq7ro1CA/exec";
         jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
       }
     } 
