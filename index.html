@@ -104,19 +104,7 @@
     control_img_list = jsPsych.randomization.repeat(control_img_list, target_list.length/2/control_img_list.length)
     exp_prime_list = [...control_img_list,...type_img] //length=40
 
-
-    var cute = {
-      type: jsPsychHtmlButtonResponse,
-      data: { screen: "cute" },
-			stimulus: idnum + "/" + cond + "/" + type + "/",
-			choices: ["Click to continue"]
-		};
-		timeline.push(cute);
-
-
-
-
-		var instruction_1 = {
+    var instruction_1 = {
       type: jsPsychHtmlButtonResponse,
       data: { screen: "instruction_1" },
 			stimulus: `
@@ -192,7 +180,7 @@
         });
       }
 		};
-		timeline.push(instruction_3);
+	timeline.push(instruction_3);
 
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
