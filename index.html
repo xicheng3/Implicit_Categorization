@@ -215,7 +215,7 @@
       stimulus: function(){
         cue_prime = jsPsych.timelineVariable("cue_prime")
         if (type_img.includes(cue_prime)){
-          trial_type = "type_trial"
+          trial_type = "target_trial"
         }
         else if (control_img_list.includes(cue_prime)){
           trial_type = "control_trial"
