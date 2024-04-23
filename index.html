@@ -18,8 +18,6 @@
     <link rel="stylesheet" href="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
-
     <style> 
       #prime {
         animation: fadeIn .1s linear;
@@ -52,11 +50,12 @@
 
     const jsPsych = initJsPsych();
 
-
+    //time duration
     function getRandomDuration (min, max){
       return Math.random()*(max-min)+min
     }
 
+    //stimuli lists
     var cat_list = ["Cat1.jpg", "Cat2.jpg", "Cat3.jpg", "Cat4.jpg", "Cat5.jpg"];
     var dog_list = ["Dog1.jpg", "Dog2.jpg", "Dog3.jpg", "Dog4.jpg", "Dog5.jpg"];
     var target_list = ["pic1.png", "pic2.png", "pic3.png", "pic4.png", "pic5.png", "pic6.png", "pic7.png", "pic8.png", 
@@ -70,15 +69,15 @@
 
     var timeline = [];
     var n_trials = target_list.length;
-    var order = 0;
+    var order = 1;
 
-    /* pass idnum, cond, type from Qualtrics URL*/
-    var idnum = parseInt(jsPsych.data.getURLVariable('idnum'))
-    var cond = parseInt(jsPsych.data.getURLVariable('cond'))
-    var type = parseInt(jsPsych.data.getURLVariable('type'))
-    //var idnum = 15987
-    //var cond = 1
-    //var type = 3
+    // pass idnum, cond, type from Qualtrics URL
+    //var idnum = parseInt(jsPsych.data.getURLVariable('idnum'))
+    //var cond = parseInt(jsPsych.data.getURLVariable('cond'))
+    //var type = parseInt(jsPsych.data.getURLVariable('type'))
+    var idnum = 88888
+    var cond = 2
+    var type = 3
 
     var prime_list = []
     var type_img = []
@@ -106,6 +105,8 @@
     control_img_list = jsPsych.randomization.repeat(control_img_list, target_list.length/2/control_img_list.length)
     exp_prime_list = [...control_img_list,...type_img] //length=40
 
+
+
     var instruction_1 = {
       type: jsPsychHtmlButtonResponse,
       data: { screen: "instruction_1" },
@@ -116,7 +117,7 @@
 			choices: ["Click to continue"],
       on_load: () => {
         document.querySelector('button').disabled = true;
-        setTimeout( () => { document.querySelector('button').disabled = false}, 3000)
+        setTimeout(() => { document.querySelector('button').disabled = false}, 3000)
       }
 		};
 		timeline.push(instruction_1);
@@ -150,7 +151,7 @@
 			choices: ["Click to continue"],
       on_load: () => {
         document.querySelector('button').disabled = true;
-        setTimeout( () => { document.querySelector('button').disabled = false}, 3000)
+        setTimeout(() => { document.querySelector('button').disabled = false}, 3000)
       }
 		};
 		timeline.push(instruction_2);
@@ -171,10 +172,10 @@
 			choices: ["Click to continue"],
       on_load: () => {
         document.querySelector('button').disabled = true;
-        setTimeout( () => { document.querySelector('button').disabled = false}, 3000)
+        setTimeout(() => { document.querySelector('button').disabled = false}, 3000)
       },
       on_finish: function(data){
-        order = 0
+        order = 1
         jsPsych.data.addProperties({
           idnum: idnum,
           cond: cond,
@@ -201,20 +202,16 @@
     }
 
     var cue_prime, cue_target, trial_type
-
     var prime = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function(){
         cue_prime = jsPsych.timelineVariable("cue_prime")
-
         if (type_img.includes(cue_prime)){
           trial_type = "type_trial"
         }
         else if (control_img_list.includes(cue_prime)){
           trial_type = "control_trial"
         }
-        console.log(cue_prime)
-
         return (`<img id="prime" src=${cue_prime} width="550">`)
       },
       choices: "NO_KEYS",
@@ -242,7 +239,6 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function(){
         cue_target = jsPsych.timelineVariable('cue_target')
-        console.log(cue_target)
         return (`<img id="target" src= ${cue_target} width="600">`)
       },
       choices: "NO_KEYS",
@@ -275,7 +271,8 @@
       on_finish: function(data){
         data.screen = "interval"
         data.order = order
-        order += 1;
+        order += 1
+        console.log(order)
       }
     }
     
@@ -292,29 +289,31 @@
       data: {screen: "fullscreen_off"},
 
       on_finish: function(){
-        window.location = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc?idnum=" + idnum + "&cond=" + cond + "&type=" + type;
-
+        //xxxxx console.log(jsPsych.data.get().filter({screen: 'response'}).csv()); xxxxx//track
+        //upload data to google sheet
+        url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec"
+        jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
+	      
         //save each participant's file indepently to a local server
 	saveData('CatDog_idnum_'+idnum, jsPsych.data.get().filter({screen: 'response'}).csv());
         // append every participant's data to a master file
         appendMasterFile(jsPsych.data.get().filter({screen: 'response'}).csv());
 
-        url = "https://script.google.com/macros/s/AKfycby-1CVPhHEU26FzzthmZdpkLPwRKiaf-XWzjU9-MctmtCyUPjxJ6XKdOumUNgHq7ro1CA/exec";
-        jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
+        window.location = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc?idnum=" + idnum + "&cond=" + cond + "&type=" + type;
       }
     } 
     timeline.push(fullscreen_off)
 
     function saveData(name, data){
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'write_data.php'); //change 
+      xhr.open('POST', 'write_data.php'); 
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify({filename: name, filedata: data}));
     }
 
     function appendMasterFile(data){
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'appended_master_file.php'); // Change the URL 
+      xhr.open('POST', 'appended_master_file.php');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify({filedata: data}));
     }
