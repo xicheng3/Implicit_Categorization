@@ -304,8 +304,8 @@
         // append every participant's data to a master file
         appendMasterFile(jsPsych.data.get().filter({screen: 'response'}).csv());
 
-        //url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec";
-        //jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
+        url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec";
+        jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
       }
     } 
     timeline.push(fullscreen_off)
