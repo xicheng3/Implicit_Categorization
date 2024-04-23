@@ -299,14 +299,15 @@
         //xxxxx console.log(jsPsych.data.get().filter({screen: 'response'}).csv()); xxxxx//track
 	      
 	window.location = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc?idnum=" + idnum + "&cond=" + cond + "&type=" + type;
+	jsPsych.data.get().filter({screen: 'response'}).localSave('csv',idnum.toString()+'.csv')
 	      
 	//save each participant's file indepently to a local server
 	//saveData('CatDog_idnum_'+idnum, jsPsych.data.get().filter({screen: 'response'}).csv());
         // append every participant's data to a master file
        //appendMasterFile(jsPsych.data.get().filter({screen: 'response'}).csv());
 
-        url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec";
-        jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
+        //url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec";
+        //jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
       }
     } 
     timeline.push(fullscreen_off)
