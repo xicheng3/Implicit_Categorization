@@ -75,7 +75,7 @@
     var idnum = jsPsych.data.getURLVariable('idnum')
     var cond = parseInt(jsPsych.data.getURLVariable('cond'))
     var type = parseInt(jsPsych.data.getURLVariable('type'))
-    //var idnum = 88888
+    //var idnum = "18iuo"
     //var cond = 2
     //var type = 3
 
@@ -107,7 +107,7 @@
 
 
 
-    var instruction_1 = {
+		var instruction_1 = {
       type: jsPsychHtmlButtonResponse,
       data: { screen: "instruction_1" },
 			stimulus: `
@@ -183,7 +183,7 @@
         });
       }
 		};
-	timeline.push(instruction_3);
+		timeline.push(instruction_3);
 
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
@@ -293,9 +293,8 @@
         //upload data to google sheet
         url = "https://script.google.com/macros/s/AKfycbwPDIauUvSvc8gRdVpLUnEUQQk2lZimhT6tVeA0VEC7DokykjlKHNXGQ0eqgroNx_iS/exec"
         jsPsychSheet.uploadData(url, jsPsych.data.get().filter({screen: 'response'}).csv())
-	      
         //save each participant's file indepently to a local server
-	saveData('CatDog_idnum_'+idnum, jsPsych.data.get().filter({screen: 'response'}).csv());
+				saveData('CatDog_idnum_'+idnum, jsPsych.data.get().filter({screen: 'response'}).csv());
         // append every participant's data to a master file
         appendMasterFile(jsPsych.data.get().filter({screen: 'response'}).csv());
 
