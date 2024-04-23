@@ -65,7 +65,7 @@
                         "pic33.png", "pic34.png", "pic35.png", "pic36.png", "pic37.png", "pic38.png", "pic39.png", "pic40.png"
     ];
 
-    var img_list = [];
+    var img_list = [...cat_list, ...dog_list, ...target_list];
 
     var timeline = [];
     var n_trials = target_list.length;
@@ -121,6 +121,14 @@
       }
 		};
 		timeline.push(instruction_1);
+   var preload = {      
+      type: jsPsychPreload,
+      auto_preload: true,
+      images: img_list,
+      data: {screen: "preloading"}
+     }
+     timeline.push(preload)
+
 
     var fullscreen_on = {
       type: jsPsychFullscreen,
